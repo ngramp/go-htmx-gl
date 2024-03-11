@@ -1,7 +1,6 @@
 package main
 
 import (
-	"GoHtmxGL/app/pages"
 	"GoHtmxGL/models"
 	"GoHtmxGL/utils"
 	"github.com/gofiber/fiber/v2"
@@ -11,9 +10,17 @@ import (
 
 func init() {
 	// Initialize the database (gorm)
+	//TODO replace with sqlx
 	models.InitDB()
 }
 func main() {
+
+	//r := chi.NewRouter()
+	//r.Use(middleware.Logger)
+	//r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+	//    w.Write([]byte("Hello World!"))
+	//})
+	//http.ListenAndServe(":3000", r)
 
 	// initialize fiber template engine
 	engine := html.New("./views", ".html")
@@ -21,22 +28,14 @@ func main() {
 	engine.AddFunc("getCssAsset", utils.GetCssAsset)
 
 	app := fiber.New(fiber.Config{
-		Views: engine,
-		// Views Layout is the global layout for all template render until override on Render function.
+		Views:       engine,
 		ViewsLayout: "layouts/main",
 	})
 	app.Static("/public", "./public")
 
-	//app.Get("/", func(c *fiber.Ctx) error {
-	//	return c.Status(fiber.StatusOK).Render("pages/index", fiber.Map{})
-	//	//return c.Render("layouts/main", fiber.Map{})
-	//})
-	//app.Get("/auth", func(c *fiber.Ctx) error {
-	//	return c.Status(fiber.StatusOK).Render("pages/index", fiber.Map{}, "layouts/authed")
-	//	//return c.Render("layouts/main", fiber.Map{})
-	//})
-
-	pages.NavPageRoutes(app)
-	pages.Components(app)
+	MenuRoutes(app)
+	ArticleRoutes(app)
+	UserRoutes(app)
+	Components(app)
 	log.Fatal(app.Listen(":8080"))
 }

@@ -1,4 +1,4 @@
-package user
+package pages
 
 import (
 	"GoHtmxGL/models"
@@ -7,21 +7,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func Routes(api fiber.Router) {
-	userGroup := api.Group("/users")
-	{
-		userGroup.Get("/", getUsers)
-		userGroup.Get("/:id", getUser)
-		userGroup.Post("/", createUser)
-		userGroup.Put("/:id", updateUser)
-		userGroup.Delete("/:id", deleteUser)
-	}
-}
-
 //todo: convert to htmx templates
 
-// getUsers handles the GET request to fetch all user
-func getUsers(ctx *fiber.Ctx) error {
+func GetUsers(ctx *fiber.Ctx) error {
 	// Logic to fetch and return all users
 	fmt.Println("Getting users")
 	var users []models.User
@@ -29,8 +17,7 @@ func getUsers(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"data": users})
 }
 
-// getUser handles the GET request to fetch a specific user
-func getUser(ctx *fiber.Ctx) error {
+func GetUser(ctx *fiber.Ctx) error {
 	// Logic to fetch and return a specific user
 	id := ctx.Params("id")
 	var user models.User
@@ -41,8 +28,7 @@ func getUser(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"data": user})
 }
 
-// createUser handles the POST request to create a new user
-func createUser(ctx *fiber.Ctx) error {
+func CreateUser(ctx *fiber.Ctx) error {
 	var user models.User
 	// Get user from context
 	if err := ctx.BodyParser(&user); err != nil {
@@ -56,8 +42,8 @@ func createUser(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"data": user})
 }
 
-// updateUser handles the PUT request to update an user
-func updateUser(ctx *fiber.Ctx) error {
+// UpdateUser handles the PUT request to update an user
+func UpdateUser(ctx *fiber.Ctx) error {
 	// Get user ID from the request parameters
 	userID := ctx.Params("id")
 
@@ -86,8 +72,8 @@ func updateUser(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"data": updatedUser})
 }
 
-// deleteUser handles the DELETE request to delete an user
-func deleteUser(ctx *fiber.Ctx) error {
+// DeleteUser handles the DELETE request to delete an user
+func DeleteUser(ctx *fiber.Ctx) error {
 	// Get user ID from the request parameters
 	userID := ctx.Params("id")
 
